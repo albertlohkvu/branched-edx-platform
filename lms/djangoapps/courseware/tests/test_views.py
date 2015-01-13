@@ -33,6 +33,7 @@ from course_modes.models import CourseMode
 from courseware.testutils import RenderXBlockTestMixin
 from courseware.tests.factories import StudentModuleFactory
 from edxmako.tests import mako_middleware_process_request
+from django_sudo_helpers.tests.utils import sudo_middleware_process_request
 from student.models import CourseEnrollment
 from student.tests.factories import AdminFactory, UserFactory, CourseEnrollmentFactory
 from util.tests.test_date_utils import fake_ugettext, fake_pgettext
@@ -1174,6 +1175,7 @@ class TestIndexView(ModuleStoreTestCase):
         )
         request.user = user
         mako_middleware_process_request(request)
+        sudo_middleware_process_request(request)
 
         # Trigger the assertions embedded in the ViewCheckerBlocks
         response = views.index(request, unicode(course.id), chapter=chapter.url_name, section=section.url_name)
@@ -1203,6 +1205,7 @@ class TestIndexView(ModuleStoreTestCase):
         )
         request.user = user
         mako_middleware_process_request(request)
+        sudo_middleware_process_request(request)
 
         response = views.index(request, unicode(course.id), chapter=chapter.url_name, section=section.url_name)
         self.assertIn("Activate Block ID: test_block_id", response.content)
