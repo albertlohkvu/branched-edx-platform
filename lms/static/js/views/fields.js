@@ -1,8 +1,22 @@
 ;(function (define, undefined) {
     'use strict';
     define([
-        'gettext', 'jquery', 'underscore', 'backbone', 'backbone-super', 'jquery.fileupload'
-    ], function (gettext, $, _, Backbone) {
+        'gettext', 'jquery', 'underscore', 'backbone', 
+        'text!templates/fields/field_readonly.underscore',
+        'text!templates/fields/field_dropdown.underscore',
+        'text!templates/fields/field_link.underscore',
+        'text!templates/fields/field_text.underscore',
+        'text!templates/fields/field_textarea.underscore',
+        'text!templates/fields/field_image.underscore',
+        'backbone-super', 'jquery.fileupload'
+    ], function (gettext, $, _, Backbone,
+                 field_readonly_template,
+                 field_dropdown_template,
+                 field_link_template,
+                 field_text_template,
+                 field_textarea_template,
+                 field_image_template
+    ) {
 
         var messageRevertDelay = 6000;
         var FieldViews = {};
@@ -36,7 +50,7 @@
 
             initialize: function () {
 
-                this.template = _.template($(this.templateSelector).text());
+                this.template = _.template(this.fieldTemplate || '');
 
                 this.helpMessage = this.options.helpMessage || '';
                 this.showMessages = _.isUndefined(this.options.showMessages) ? true : this.options.showMessages;
@@ -142,6 +156,7 @@
         FieldViews.EditableFieldView = FieldViews.FieldView.extend({
 
             initialize: function (options) {
+                this.persistChanges = _.isUndefined(options.persistChanges) ? false : options.persistChanges;
                 _.bindAll(this, 'saveAttributes', 'saveSucceeded', 'showDisplayMode', 'showEditMode',
                     'startEditing', 'finishEditing'
                 );
@@ -158,20 +173,22 @@
             },
 
             saveAttributes: function (attributes, options) {
-                var view = this;
-                var defaultOptions = {
-                    contentType: 'application/merge-patch+json',
-                    patch: true,
-                    wait: true,
-                    success: function () {
-                        view.saveSucceeded();
-                    },
-                    error: function (model, xhr) {
-                        view.showErrorMessage(xhr);
-                    }
-                };
-                this.showInProgressMessage();
-                this.model.save(attributes, _.extend(defaultOptions, options));
+                if (this.persistChanges === true) {
+                    var view = this;
+                    var defaultOptions = {
+                        contentType: 'application/merge-patch+json',
+                        patch: true,
+                        wait: true,
+                        success: function () {
+                            view.saveSucceeded();
+                        },
+                        error: function (model, xhr) {
+                            view.showErrorMessage(xhr);
+                        }
+                    };
+                    this.showInProgressMessage();
+                    this.model.save(attributes, _.extend(defaultOptions, options));
+                }
             },
 
             saveSucceeded: function () {
@@ -219,6 +236,14 @@
                         this.showDisplayMode(true);
                     }
                 }
+            },
+
+            highlightFieldOnError: function () {
+                this.$el.addClass('error');
+            },
+
+            unhighlightField: function () {
+                this.$el.removeClass('error');
             }
         });
 
@@ -226,7 +251,7 @@
 
             fieldType: 'readonly',
 
-            templateSelector: '#field_readonly-tpl',
+            fieldTemplate: field_readonly_template,
 
             initialize: function (options) {
                 this._super(options);
@@ -259,7 +284,7 @@
 
             fieldType: 'text',
 
-            templateSelector: '#field_text-tpl',
+            fieldTemplate: field_text_template,
 
             events: {
                 'change input': 'saveValue'
@@ -302,7 +327,7 @@
 
             fieldType: 'dropdown',
 
-            templateSelector: '#field_dropdown-tpl',
+            fieldTemplate: field_dropdown_template,
 
             events: {
                 'click': 'startEditing',
@@ -421,7 +446,7 @@
 
             fieldType: 'textarea',
 
-            templateSelector: '#field_textarea-tpl',
+            fieldTemplate: field_textarea_template,
 
             events: {
                 'click .wrapper-u-field': 'startEditing',
@@ -451,6 +476,7 @@
                     mode: this.mode,
                     value: value,
                     message: this.helpMessage,
+                    descriptionMessage: this.options.descriptionMessage,
                     placeholderValue: this.options.placeholderValue
                 }));
                 this.delegateEvents();
@@ -520,7 +546,7 @@
 
             fieldType: 'link',
 
-            templateSelector: '#field_link-tpl',
+            fieldTemplate: field_link_template,
 
             events: {
                 'click a': 'linkClicked'
@@ -553,7 +579,7 @@
 
             fieldType: 'image',
 
-            templateSelector: '#field_image-tpl',
+            fieldTemplate: field_image_template,
             uploadButtonSelector: '.upload-button-input',
 
             titleAdd: gettext("Upload an image"),
