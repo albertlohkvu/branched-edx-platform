@@ -73,6 +73,7 @@ from social.apps.django_app.default import models
 from social.exceptions import AuthException
 from social.pipeline import partial
 from social.pipeline.social_auth import associate_by_email
+from sudo.utils import grant_sudo_privileges
 
 import student
 
@@ -98,6 +99,7 @@ AUTH_REDIRECT_KEY = 'next'
 AUTH_ENTRY_LOGIN = 'login'
 AUTH_ENTRY_REGISTER = 'register'
 AUTH_ENTRY_ACCOUNT_SETTINGS = 'account_settings'
+AUTH_ENTRY_SUDO = 'grant_sudo'
 
 # This is left-over from an A/B test
 # of the new combined login/registration page (ECOM-369)
@@ -150,6 +152,7 @@ _AUTH_ENTRY_CHOICES = frozenset([
 
     AUTH_ENTRY_LOGIN_API,
     AUTH_ENTRY_REGISTER_API,
+    AUTH_ENTRY_SUDO
 ])
 
 _DEFAULT_RANDOM_PASSWORD_LENGTH = 12
@@ -647,3 +650,18 @@ def associate_by_email_if_login_api(auth_entry, backend, details, user, *args, *
             # email address and the legitimate user would now login to the illegitimate
             # account.
             return association_response
+
+
+@partial.partial
+def create_sudo_session(strategy, auth_entry, *args, **kwargs):
+    """
+    Grant sudo privileges if user is authenticated and auth_entry
+    is equal to AUTH_ENTRY_SUDO.
+    """
+    request = strategy.request if strategy else None
+    if auth_entry == AUTH_ENTRY_SUDO and request.user.is_authenticated():
+        course_specific_region = None
+        redirect_to = strategy.session_get('next', '')
+        if redirect_to:
+            course_specific_region = redirect_to.split('courses/')[1].split('/instructor')[0]
+        grant_sudo_privileges(request, region=course_specific_region)
