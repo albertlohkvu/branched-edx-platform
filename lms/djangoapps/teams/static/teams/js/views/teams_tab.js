@@ -78,7 +78,11 @@
                                    url: 'teams',
                                    view: new TempTabView({text: 'This is the new Teams tab.'})
                                }, {
-                                   title: gettext('Browse'),
+                                   // Translators: This will be shown
+                                   // to users as "Browse teams" if
+                                   // they are using a screenreader,
+                                   // and "Browse" otherwise.
+                                   title: _.escape(gettext('Browse')) + '<span class="sr"> ' + gettext('teams') + '</span>',
                                    url: 'browse',
                                    view: new TopicsView({
                                        collection: this.topicsCollection,

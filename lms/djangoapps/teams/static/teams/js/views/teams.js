@@ -11,10 +11,16 @@
                 'click button.action': '' // entry point for team creation
             },
 
+            srInfo: {
+                id: "heading-browse-teams",
+                text: gettext('All teams')
+            },
+
             initialize: function (options) {
                 this.itemViewClass = TeamCardView.extend({
                     router: options.router,
-                    maxTeamSize: options.maxTeamSize
+                    maxTeamSize: options.maxTeamSize,
+                    srInfo: this.srInfo
                 });
                 PaginatedView.prototype.initialize.call(this);
             },
