@@ -40,6 +40,7 @@
                     this.topicUrl = options.topicUrl;
                     this.teamsUrl = options.teamsUrl;
                     this.maxTeamSize = options.maxTeamSize;
+                    this.currentUsername = options.currentUsername;
                     // This slightly tedious approach is necessary
                     // to use regular expressions within Backbone
                     // routes, allowing us to capture which tab
@@ -168,7 +169,9 @@
                         self.getTeam(teamID).done(function(team) {
                             var view = new TeamProfileView({
                                 courseID: courseID,
-                                model: team
+                                model: team,
+                                maxTeamSize: self.maxTeamSize,
+                                currentUsername: self.currentUsername
                             });
                             deferred.resolve(self.createViewWithHeader(view, team, topic));
                         });

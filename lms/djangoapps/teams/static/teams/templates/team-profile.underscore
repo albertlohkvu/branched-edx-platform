@@ -5,23 +5,45 @@
 
     <div class="team-detail">
         <h4><%- gettext("Team Details") %></h4>
-        <span>You are a member of this team.</span>
+        <% if (isMember) { %>
+            <div class="team-member">
+                <span><%- gettext("You are a member of this team.") %></span>
+            </div>
+        <% } %>
         <div class="team-members">
-
             <div class="members-info"></div>
-            <span>10/10 members</span>
         </div>
 
-
-        <div>
-            <i class="u-field-icon icon fa fa-comment fa-fw" aria-hidden="true"></i>
-            <span>Language</span>
+        <div class="team-capacity">
+            <span><%- membershipText %></span>
         </div>
-        <div>
+
+        <div class="team-country">
             <i class="u-field-icon icon fa fa-globe fa-fw" aria-hidden="true"></i>
-            <span>Country</span>
+            <span>
+                <%=
+                    interpolate_text(
+                        gettext("{country}"),
+                        {
+                            'country': country,
+                        }
+                    )
+                %>
+            </span>
         </div>
-
+        <div class="team-language">
+            <i class="u-field-icon icon fa fa-comment-o fa-fw" aria-hidden="true"></i>
+            <span>
+                <%=
+                    interpolate_text(
+                        gettext("{language}"),
+                        {
+                            'language': language,
+                        }
+                    )
+                %>
+            </span>
+        </div>
         <div class="leave-team">
             <a href="#"><%- gettext("Leave Team") %></a>
         </div>

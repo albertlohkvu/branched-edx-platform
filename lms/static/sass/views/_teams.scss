@@ -352,8 +352,21 @@
       @include float(left);
     }
     .team-detail {
+      width: 30%;
       @include float(left);
-      @include margin-left(($baseline + ($baseline/2)))
+      @include margin-left(($baseline + ($baseline/2)));
+
+      div, h4 {
+        margin-bottom: ($baseline/4);
+      }
+      @extend %t-copy-sub1;
+      color: $gray-l1;
+
+      .image-url {
+        border: 2px solid $outer-border-color;
+        border-radius: ($baseline/4);
+        margin-bottom: ($baseline/4);
+      }
     }
   }
 

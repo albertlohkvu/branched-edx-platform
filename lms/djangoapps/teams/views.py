@@ -94,7 +94,8 @@ class TeamsDashboardView(View):
                 'topics_detail', kwargs={'topic_id': 'topic_id', 'course_id': str(course_id)}, request=request
             ),
             "topics_url": reverse('topics_list', request=request),
-            "teams_url": reverse('teams_list', request=request)
+            "teams_url": reverse('teams_list', request=request),
+            "current_username": request.user.username
         }
         return render_to_response("teams/teams.html", context)
 
