@@ -151,7 +151,8 @@ class EntranceExamTestCases(LoginEnrollmentTestCase, ModuleStoreTestCase):
                             'graded': True,
                             'format': '',
                             'due': None,
-                            'active': True
+                            'active': True,
+                            'is_proctored_enabled': False,
                         }
                     ],
                     'url_name': u'Entrance_Exam_Section_-_Chapter_1',
@@ -170,7 +171,8 @@ class EntranceExamTestCases(LoginEnrollmentTestCase, ModuleStoreTestCase):
                             'graded': False,
                             'format': '',
                             'due': None,
-                            'active': False
+                            'active': False,
+                            'is_proctored_enabled': False,
                         },
                         {
                             'url_name': u'Lesson_1',
@@ -178,7 +180,8 @@ class EntranceExamTestCases(LoginEnrollmentTestCase, ModuleStoreTestCase):
                             'graded': False,
                             'format': '',
                             'due': None,
-                            'active': False
+                            'active': False,
+                            'is_proctored_enabled': False,
                         }
                     ],
                     'url_name': u'Overview',
@@ -205,7 +208,8 @@ class EntranceExamTestCases(LoginEnrollmentTestCase, ModuleStoreTestCase):
                             'graded': True,
                             'format': '',
                             'due': None,
-                            'active': True
+                            'active': True,
+                            'is_proctored_enabled': False,
                         }
                     ],
                     'url_name': u'Entrance_Exam_Section_-_Chapter_1',

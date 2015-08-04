@@ -621,17 +621,17 @@ class TestTOC(ModuleStoreTestCase):
             self.setup_modulestore(default_ms, setup_finds, setup_sends)
             expected = ([{'active': True, 'sections':
                           [{'url_name': 'Toy_Videos', 'display_name': u'Toy Videos', 'graded': True,
-                            'format': u'Lecture Sequence', 'due': None, 'active': False},
+                            'format': u'Lecture Sequence', 'due': None, 'active': False, 'is_proctored_enabled': False},
                            {'url_name': 'Welcome', 'display_name': u'Welcome', 'graded': True,
-                            'format': '', 'due': None, 'active': False},
+                            'format': '', 'due': None, 'active': False, 'is_proctored_enabled': False},
                            {'url_name': 'video_123456789012', 'display_name': 'Test Video', 'graded': True,
-                            'format': '', 'due': None, 'active': False},
+                            'format': '', 'due': None, 'active': False, 'is_proctored_enabled': False},
                            {'url_name': 'video_4f66f493ac8f', 'display_name': 'Video', 'graded': True,
-                            'format': '', 'due': None, 'active': False}],
+                            'format': '', 'due': None, 'active': False, 'is_proctored_enabled': False}],
                           'url_name': 'Overview', 'display_name': u'Overview'},
                          {'active': False, 'sections':
                           [{'url_name': 'toyvideo', 'display_name': 'toyvideo', 'graded': True,
-                            'format': '', 'due': None, 'active': False}],
+                            'format': '', 'due': None, 'active': False, 'is_proctored_enabled': False}],
                           'url_name': 'secret:magic', 'display_name': 'secret:magic'}])
 
             course = self.store.get_course(self.toy_course.id, depth=2)
@@ -661,17 +661,17 @@ class TestTOC(ModuleStoreTestCase):
             section = 'Welcome'
             expected = ([{'active': True, 'sections':
                           [{'url_name': 'Toy_Videos', 'display_name': u'Toy Videos', 'graded': True,
-                            'format': u'Lecture Sequence', 'due': None, 'active': False},
+                            'format': u'Lecture Sequence', 'due': None, 'active': False, 'is_proctored_enabled': False},
                            {'url_name': 'Welcome', 'display_name': u'Welcome', 'graded': True,
-                            'format': '', 'due': None, 'active': True},
+                            'format': '', 'due': None, 'active': True, 'is_proctored_enabled': False},
                            {'url_name': 'video_123456789012', 'display_name': 'Test Video', 'graded': True,
-                            'format': '', 'due': None, 'active': False},
+                            'format': '', 'due': None, 'active': False, 'is_proctored_enabled': False},
                            {'url_name': 'video_4f66f493ac8f', 'display_name': 'Video', 'graded': True,
-                            'format': '', 'due': None, 'active': False}],
+                            'format': '', 'due': None, 'active': False, 'is_proctored_enabled': False}],
                           'url_name': 'Overview', 'display_name': u'Overview'},
                          {'active': False, 'sections':
                           [{'url_name': 'toyvideo', 'display_name': 'toyvideo', 'graded': True,
-                            'format': '', 'due': None, 'active': False}],
+                            'format': '', 'due': None, 'active': False, 'is_proctored_enabled': False}],
                           'url_name': 'secret:magic', 'display_name': 'secret:magic'}])
 
             with check_mongo_calls(toc_finds):
