@@ -32,7 +32,7 @@
             </span>
         </div>
         <div class="team-language">
-            <i class="u-field-icon icon fa fa-comment-o fa-fw" aria-hidden="true"></i>
+            <i class="icon fa fa-comment-o fa-fw" aria-hidden="true"></i>
             <span>
                 <%=
                     interpolate_text(
@@ -44,13 +44,28 @@
                 %>
             </span>
         </div>
-        <div class="leave-team">
-            <a href="#"><%- gettext("Leave Team") %></a>
-        </div>
-        <div class="invite-team">
-            <h6><%- gettext("Invite Others") %></h6>
-            <span>No invites available - this team is full</span>
-        </div>
+
+        <% if (isMember) { %>
+            <div class="leave-team">
+                <a href="#"><%- gettext("Leave Team") %></a>
+            </div>
+
+            <div class="divider-lv1"></div>
+
+            <div class="invite-team">
+                <h4><%- gettext("Invite Others") %></h4>
+                <% if (hasCapacity) { %>
+                    <span>
+                        <%- gettext("Invite others to join this team!") %>
+                        <a class="invite-link" href="#"><i class="icon fa fa-link fa-fw"></i><%- gettext("Copy") %></a>
+                    </span>
+                <% } else {  %>
+                    <span><%- gettext("No invites available - this team is full") %></span>
+                <% } %>
+            </div>
+
+            <div class="divider-lv1"></div>
+        <% } %>
 
     </div>
 </div>

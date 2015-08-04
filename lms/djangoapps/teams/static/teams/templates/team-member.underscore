@@ -1,6 +1,7 @@
 
 <span class="team-member">
     <a class="member-profile" href="<%= memberProfileUrl %>">
+        <p><span class="sr"><%- gettext(username) %></span><%- gettext(username) %></p>
         <img class="image-url" src="<%= imageUrl %>" alt="<%- gettext(username) %>" />
     </a>
 </span>

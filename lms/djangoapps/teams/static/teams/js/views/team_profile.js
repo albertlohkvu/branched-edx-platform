@@ -9,6 +9,10 @@
         ],
         function (Backbone, _, gettext, TeamDiscussionView, team_template, teamMemberTemplate) {
             var TeamProfileView = Backbone.View.extend({
+
+                events: {
+                    'click .invite-link': 'copyToClipboard'
+                },
                 initialize: function (options) {
                     this.courseID = options.courseID;
                     this.discussionTopicID = this.model.get('discussion_topic_id');
@@ -36,7 +40,8 @@
                             ),
                             {member_count: this.memberships.length, max_member_count: this.maxTeamSize}, true
                         ),
-                        isMember: this.isUserMemberOfTeam()
+                        isMember: this.isUserMemberOfTeam(),
+                        hasCapacity: this.memberships.length < this.maxTeamSize
 
                     }));
                     this.discussionView = new TeamDiscussionView({
@@ -64,7 +69,10 @@
                                 }
                             },
                             error: function () {
-                                // TODO add error code here.
+                               this.$('.wrapper-msg').removeClass('is-hidden');
+                               this.$('.msg-content .copy p').text(
+                                   gettext("An error occurred. Please try again.")
+                               );
                             }
                         });
 
@@ -76,6 +84,10 @@
                         return member.user.id === self.currentUsername
                     });
                     return member ? true : false;
+                },
+                copyToClipboard: function (event) {
+                    event.preventDefault();
+                    window.prompt("Copy to clipboard: Ctrl+C, Enter", 'url-to-detail?invite=true');
                 }
             });
 
