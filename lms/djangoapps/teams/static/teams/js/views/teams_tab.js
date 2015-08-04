@@ -169,7 +169,7 @@
                             var readOnly = !(
                                 self.$el.data('privileged') ||
                                     _.any(team.attributes.membership, function (membership) {
-                                        return membership.user.id === self.$el.data('username');
+                                        return membership.user.username === self.$el.data('username');
                                     })
                                 ),
                                 view = new TeamProfileView({

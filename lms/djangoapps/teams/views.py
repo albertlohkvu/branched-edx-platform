@@ -8,6 +8,8 @@ from django.core.paginator import Paginator
 from django.views.generic.base import View
 import newrelic.agent
 
+from itertools import chain
+
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -26,6 +28,13 @@ from django.utils.translation import ugettext_noop
 
 from student.models import CourseEnrollment, CourseAccessRole
 from student.roles import CourseStaffRole
+
+from django_comment_common.models import (
+    Role,
+    FORUM_ROLE_ADMINISTRATOR,
+    FORUM_ROLE_MODERATOR,
+    FORUM_ROLE_COMMUNITY_TA
+)
 
 from openedx.core.lib.api.parsers import MergePatchParser
 from openedx.core.lib.api.permissions import IsStaffOrReadOnly
@@ -97,7 +106,7 @@ class TeamsDashboardView(View):
             "topics_url": reverse('topics_list', request=request),
             "teams_url": reverse('teams_list', request=request),
             "username": user.username,
-            "privileged": user.is_staff or CourseStaffRole(course_key).has_user(user)
+            "privileged": has_discussion_privileges(user, course_key)
         }
         return render_to_response("teams/teams.html", context)
 
@@ -107,6 +116,24 @@ def is_feature_enabled(course):
     Returns True if the teams feature is enabled.
     """
     return settings.FEATURES.get('ENABLE_TEAMS', False) and course.teams_enabled
+
+
+def has_discussion_privileges(user, course_id):
+    """Returns True if the user is privileged in teams discussions for
+    this course. The user must be one of Discussion Admin, Moderator,
+    or Community TA.
+
+    Args:
+      user (User): The user to check privileges for.
+      course_id (CourseKey): A key for the course to check privileges for.
+
+    Returns:
+      bool
+    """
+    roles = Role.objects.filter(course_id=course_id, name__in=[
+        FORUM_ROLE_ADMINISTRATOR, FORUM_ROLE_COMMUNITY_TA, FORUM_ROLE_MODERATOR
+    ])
+    return user.id in chain.from_iterable(role.users.values_list('id', flat=True) for role in roles)
 
 
 def has_team_api_access(user, course_key, access_username=None):
